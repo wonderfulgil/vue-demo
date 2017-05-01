@@ -2,22 +2,165 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>绑定数组数据v-for</title>
+<title>循环绑定数据v-for</title>
+<style>
+a{
+	text-decoration: none;
+	color:#333;
+}
+ul{
+	list-style: none
+}
+.demo{
+	width:700px;
+	margin: 50px auto;
+}
+.pages {
+	overflow: hidden;
+}
+.pages li{
+	float:left;
+	margin-right: 10px;
+}
+.pages li a{
+	display: inline-block;
+	padding: 5px 10px;
+    background: #fff;
+    color: #337ab7;
+    border: 1px solid #eee;
+}
+.pages li.disabled a{
+	color:#ccc;
+}
+.pages li.active a{
+	background: #337ab7;
+    color:#fff ;
+}
+
+h1{text-align: center;}
+</style>
 <script src="js/vue.js"  type="text/javascript"></script>
 </head>
 <body>
-<ul class='list'>
-	<li v-for='texts in list'>{{texts.text}}</li>
-</ul>
+<div class="demo">
+	<h1>循环绑定数据v-for</h1>
+	<h2>1.数组</h2>
+	<h3>基本用法</h3>
+	v-for 指令需要以 item in items 形式的特殊语法， items 是源数据数组并且 item 是数组元素迭代的别名。<br><br>
+	<ul class='list'>
+		<li v-for='list in lists'>{{list}}</li>
+	</ul>
+	<hr>
+	<h3>当前项的索引</h3>
+	在 v-for 块中，我们拥有对父作用域属性的完全访问权限。 v-for 还支持一个可选的第二个参数为当前项的索引,如：v-for='(item, index) in items'。<br><br>
+	<ul class='list'>
+		<li v-for='(list, index) in lists'>{{ index }}--{{list}}</li>
+	</ul>
+	<hr>
+	<h3>of分隔符</h3>
+	可以用 of 替代 in 作为分隔符,如：v-for='(item, index) of items'：<br><br>
+	<ul class='list'>
+		<li v-for='(list, index) of lists'>{{ index }}--{{list}}</li>
+	</ul>
+	<hr>
+
+	<h2>2.Json数组</h2>
+	<h3>基本用法</h3>
+	v-for 指令需要以 item in items 形式的特殊语法，获取内容项：item.name 。<br><br>
+	<ul class='list'>
+		<li v-for='list in lists01'>姓名：{{list.name}} 性别：{{list.sex}} 年龄：{{list.age}} </li>
+	</ul>
+	<hr>
+	<h3>当前项的索引</h3>
+
+	在 v-for 块中，我们拥有对父作用域属性的完全访问权限。 v-for 还支持一个可选的第二个参数为当前项的索引,如：v-for='(item, index) in items'。<br><br>
+	<ul class='list'>
+		<li v-for='(list, index) in lists01'>{{ index }}--姓名：{{list.name}} 性别：{{list.sex}} 年龄：{{list.age}}</li>
+	</ul>
+	<hr>
+	<h3>of分隔符</h3>
+	可以用 of 替代 in 作为分隔符,如：v-for='(item, index) of items'：<br><br>
+	<ul class='list'>
+		<li v-for='(list, index) of lists01'>{{ index }}----姓名：{{list.name}} 性别：{{list.sex}} 年龄：{{list.age}}</li>
+	</ul>
+	<hr>
+
+	<h2>3.json对象迭代 v-for</h2>
+	可以用 v-for 通过一个对象的属性来迭代。如：v-for='(list, index) of object'：<br><br>
+	<h3>基本用法</h3>
+	<ul class='list'>
+		<li v-for='(list, index) of object'>{{ index }}--{{list}}</li>
+	</ul>
+	<hr>
+	<h3>提供第二个的参数为键名</h3>
+	如：v-for="(value, key) in object"
+	<ul class='list'>
+		<li v-for="(value, key) in object"> {{ key }} -- {{ value }}</li>
+	</ul>
+	<hr>
+	<h3>第三个参数为索引：</h3>
+	如：v-for="(value, key, index) in object"
+	<ul class='list'>
+		<li v-for="(value, key, index) in object">  {{ index }}--{{ key }} : {{ value }}</li>
+	</ul>
+	
+	<hr>
+	<h2>4.整数迭代</h2>
+	v-for 也可以取整数。在这种情况下，它将重复多次模板。<br><br>
+	<h3>例子1：</h3>
+	名。
+	<ul class='pages'>
+		<span v-for="n in 10">{{ n }}</span>
+	</ul>
+
+	<hr>
+	<h2>5.模板v-for</h2>
+	类似于 template v-if，也可以将 v-for 用在 template 标签上，以渲染一个包含多个元素的块。<br><br>
+	<h3>例子1：</h3>
+	v-for 指令需要以 item in items 形式的特殊语法， items 是源数据数组并且 item 是数组元素迭代的别名。
+	<!--，pages是10，然后遍历它的时候，pages的值会从1依次到10!-->
+	<ul class='pages'>
+		<template v-for="page in pages ">
+	        <li v-if="page==1" class="disabled"><a href="#">上一页</a></li>
+	        <li v-if="page==1" class="active"><a href="#">{{page}}</a></li>
+	        <li v-else><a href="#">{{page}}</a></li>
+	        <li v-if="page==pages"><a href="#">下一页</a></li>
+		</template>
+	</ul>
+	<h3>例子2：</h3>
+	在 v-for 块中，我们拥有对父作用域属性的完全访问权限。 v-for 还支持一个可选的第二个参数为当前项的索引,如：v-for='(item, index) in items'。<br><br>
+	<ul class='list'>
+	    <template v-for='(list,index) in lists'>
+			<li>第{{index + 1}}段内容：</li>
+			<li>{{list}}</li>
+		</template>
+	</ul>
+	<h3>例子3：</h3>
+	<h3>of分隔符</h3>
+	可以用 of 替代 in 作为分隔符,如：v-for='(item, index) of items'：<br><br>
+	<ul class='list'>
+		<template v-for='(list,index) of lists'>
+			<li>第{{index + 1}}段内容：</li>
+			<li>{{list}}</li>
+		</template>
+	</ul>	
+</div>
 <script  type="text/javascript">
 	 var vm=new Vue({
-	 	el:'.list',
+	 	el:'.demo',
 	 	data:{
-	 		list:[
-	 			{text:'你好'},
-	 			{text:'hello'},
-	 			{text:'下午好'}
-	 		]
+	 		lists:['你好','hello','下午好'],
+	 		lists01:[
+	 			{name:'小明',sex:"男",age:"19"},
+	 			{name:'小红',sex:"女",age:"33"},
+	 			{name:'娜娜',sex:"女",age:"22"}
+	 		],
+	 		object: {
+			    FirstName: 'John',
+			    LastName: 'Doe',
+			    Age: 30
+			},
+	 		pages: 10
 	 	}
 	 })
 </script>
