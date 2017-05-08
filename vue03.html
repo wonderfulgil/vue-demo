@@ -2,16 +2,158 @@
 <html>
 <head>
 <meta charset="utf-8">
+<title>属性绑定--v-bind</title>
+<style>
+.demo{
+	width:700px;
+	margin: 50px auto;
+}
+h1{text-align: center;}
+.active{
+	color:green;
+	font-weight: bold;
+}
+.text-danger{
+	background:red;
+}
+#demo1:hover{
+	width:500px;
+}
+#demo1{
+	color: #fff;
+	background: red;
+	display: inline-block;
+	width:100px;
+}
+
+</style>
 <script src="js/vue.js"  type="text/javascript"></script>
 </head>
 <body>
-<div v-bind:id="id"></div>
+
+<div class="demo">
+	<h1>属性绑定--v-bind</h1>
+	<h2>1.属性绑定</h2>
+	<h3>基本用法</h3>
+	如：v-bind:id="id"<br>
+    <h3>例子1:</h3>
+	<div v-bind:id="id">你好啊</div>
+	绑定的id为: {{id}}<br><br>
+	<hr>
+	<h3>例子2:</h3>
+	<img v-bind:src="src"><br>
+	绑定的src为: {{src}}
+	<hr>
+
+	<h2>2.绑定 HTML Class</h2>
+	<h3>对象语法</h3>
+	v-bind:class 一个对象，以动态地切换 class 。如：v-bind:class="{active: isActive}"，表示class active 的更新将取决于数据属性 isActive 是否为真值 。<br>
+	<h3>例子1:</h3>
+	<span v-bind:class="{active: isActive, 'text-danger': hasError}">你好啊</span><br><br>
+	绑定的class为:{{(isActive?"active":'')+" "+(hasError?"text-danger":'')}}<br><br>
+	<hr>
+	<h3>例子2:</h3>
+	v-bind:class 指令可以与普通的 class 属性共存。<br><br>
+	<span class="static" v-bind:class="{active: isActive, 'text-danger': hasError}">你好啊</span><br><br>
+	绑定的class为:static {{(isActive?"active":'')+" "+(hasError?"text-danger":'')}}
+	<hr>
+	<h3>例子3:</h3>
+	直接绑定数据里的一个对象如：v-bind:class="classObject"<br><br>
+	<span class="static" v-bind:class="classObject">你好啊</span><br><br>
+	绑定的class为:
+	<hr>
+
+	<h3>例子4:</h3>
+	绑定返回对象的计算属性<br><br>
+	<span class="static" v-bind:class="classAdd">你好啊</span><br><br>
+	绑定的class为:static 
+	<hr>
+	<hr>
+
+	
+	<h3>数组语法</h3>
+	把一个数组传给 v-bind:class ，以应用一个 class 列表：如：v-bind:class="[activeClass, errorClass]"<br>
+	<h3>例子1:</h3>
+	<span v-bind:class="[activeClass, errorClass]">你好啊</span><br><br>
+	<hr>
+	<h3>例子2:</h3>
+	v-bind:class 指令可以与普通的 class 属性共存。<br><br>
+	<span class="static" v-bind:class="[activeClass, errorClass]">你好啊</span><br><br>
+	<hr>
+	<h3>例子3:</h3>
+	根据条件切换列表中的 class,如：v-bind:class="[isActive ? activeClass : '', errorClass]"<br><br>
+	<span v-bind:class="[isActive ? activeClass : '', errorClass]">你好啊</span><br><br>
+	或者：可以在数组语法中使用对象语法：如：v-bind:class="[{ active: isActive }, errorClass]"<br><br>
+	<span v-bind:class="[{ active: isActive }, errorClass]">你好啊</span><br><br>
+	<hr>
+
+	<h2>3.绑定内联样式</h2>
+	<h3>对象语法</h3>
+	CSS 属性名可以用驼峰式（camelCase）或短横分隔命名（kebab-case）：
+	<h3>例子1:</h3>
+	如：v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"<br><br>
+	<span v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">你好啊</span><br><br>
+	<hr>
+	<h3>例子2:</h3>
+	直接绑定到一个样式对象，如：v-bind:style="styleObject"<br><br>
+	<span v-bind:style="styleObject">你好啊</span><br><br>
+	<hr>
+	<h3>例子3:(略)</h3>
+	对象语法常常结合返回对象的计算属性使用。<br><br>
+	
+	<hr><hr>
+	<h3>数组语法</h3>
+	v-bind:style 的数组语法可以将多个样式对象应用到一个元素上，
+	<h3>例子1:</h3>
+	<span v-bind:style="[styleObject,fsty]">你好啊</span><br><br>
+	<hr>
+	
+	<h2>4.自动添加前缀</h2>
+	当 v-bind:style 使用需要特定前缀的 CSS 属性时，如 transform ，Vue.js 会自动侦测并添加相应的前缀。
+	<h3>例子1:</h3>
+	<span id="demo1" v-bind:style="trans">你好啊</span><br><br>
+	<hr>
+</div>
 <script  type="text/javascript">
 	 var vm=new Vue({
 	 	el:"div",
 	 	data:{
-	 		id:"demo"
-	 	}
+	 		id:"demo",
+	 		src:"img/girl.jpg",
+	 		isActive: true,
+  			hasError: true,
+  			error: null,
+  			classObject:{
+  				active: true,
+    			'text-danger':true
+  			},
+  			activeClass: 'active',
+  			errorClass: 'text-danger',
+  			activeColor: 'red',
+  			fontSize: 30,
+  			styleObject: {
+			    color: 'red',
+			    fontSize: '30px'
+			},
+			fsty:{
+				fontStyle:'italic'
+			},
+			trans: {
+				transition:'all .5s ease',
+			}
+
+
+	 	},
+	 	computed: {
+		  classAdd: function () {
+		    return {
+		      active: this.isActive && !this.error,/*isActive为真并且error为false,就为真*/
+		      'text-danger': this.error && this.error.type === 'fatal'
+		      /*error为true并且error的类型为fatal,就为真*/
+		    }
+		  }
+		}
+
 	 })
 </script>
 </body>
