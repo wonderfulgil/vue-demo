@@ -1,0 +1,85 @@
+
+<!DOCTYPE html >
+<html>
+<head>
+<meta charset="utf-8">
+<title>vue选项卡式图片切换</title>
+<style>
+ul{
+	margin: 0;
+	padding:0;
+}
+.demo{
+	width:700px;
+	margin: 50px auto;
+}
+li{
+	list-style: none;
+}
+h2{text-align: center;}
+button{
+	padding:10px 50px;
+	margin:10px 10px 10px 0;
+	color: #333;
+	outline: none;
+    border: none;
+    cursor: pointer;
+}
+button.active{
+	background: #ff2972;
+	color: #fff;
+}
+</style>
+<script src="js/vue.js"  type="text/javascript"></script>
+</head>
+<body>
+
+<div class="demo">
+ 	<h2>图片切换1</h2>
+ 	<hr>
+	<button v-for="'(btn, index) in btns" v-bind:class="btn.active==true?'active':''" v-on:click="onclick(index)">{{btn.text}}</button>
+	<div class="nr">
+		<img :src='imgsrc' :width="width" :height="height">
+	</div>
+	<hr>
+	<h2>图片切换2</h2>
+ 	<hr>
+	<button v-for="'(list, index) in lists"  v-bind:class="{active: i==index}" v-on:click="show(index)">{{list}}</button>
+	<div class="nr">
+		<img :src='imagesrc' :width="width" :height="height">
+	</div>
+</div>
+<script  type="text/javascript">
+	 var vm=new Vue({
+	 	el:".demo",
+	 	data:{
+	 		width:'700px',
+	 		height:'400px',
+	 		btns:[
+		 		{text:"图片1",active:true},
+		 		{text:"图片2",active:false},
+		 		{text:"图片3",active:false},
+		 		{text:"图片4",active:false}
+		 	],
+	 		imgsrc:'img/1-1.png',
+	 		lists:["图片1","图片2","图片3","图片4"],
+		 	i: '',
+		 	imagesrc:'img/1-1.png'
+	 	},
+	 	methods:{
+			onclick:function(index){
+			    for (var m = this.btns.length - 1; m >= 0; m--) {
+			    	this.btns[m].active=false;
+			    }
+			    this.btns[index].active=true;
+			    this.imgsrc='img/1-'+(index+1)+'.png'
+			},
+			show (index) {
+		      this.i = index,
+		      this.imagesrc='img/1-'+(index+1)+'.png'
+		    }
+	 	}	 	
+	 })
+</script>
+
+</body>
