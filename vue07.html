@@ -3,9 +3,9 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>vue选项卡式图片切换</title>
+<title>vue选项卡</title>
 <style>
-ul{
+ul,p{
 	margin: 0;
 	padding:0;
 }
@@ -16,7 +16,11 @@ ul{
 li{
 	list-style: none;
 }
-h2{text-align: center;}
+h1,h2{text-align: center;}
+a{
+	text-decoration: none;
+	color:#333;
+}
 button{
 	padding:10px 50px;
 	margin:10px 10px 10px 0;
@@ -29,11 +33,42 @@ button.active{
 	background: #ff2972;
 	color: #fff;
 }
+.books-content{
+	width:700px;
+	overflow: hidden;
+}
+.books-content li{
+	float:left;
+	margin:10px 10px;
+}
+.books-content a{
+	display: inline-block;
+	width: 213px;
+    height: 200px;
+    overflow: hidden;
+    text-align: center;
+    margin: 7px auto 0;
+}
+.books-content p{
+	text-align: left;
+}
+.book-name{
+	font-size:16px;
+	line-height:24px;
+	height:24px;
+	color:#333;
+	width: 200px;
+	overflow:hidden;
+}
+.book-price{
+	font-size:14px;
+	color:red;
+}
 </style>
 <script src="js/vue.js"  type="text/javascript"></script>
 </head>
 <body>
-
+<h1>vue选项卡</h1>
 <div class="demo">
  	<h2>图片切换1</h2>
  	<hr>
@@ -48,6 +83,24 @@ button.active{
 	<div class="nr">
 		<img :src='imagesrc' :width="width" :height="height">
 	</div>
+	<hr>
+	<h2>选项卡</h2>
+ 	<hr>
+	<button v-for="(list, index) in tablists"  v-bind:class="{active: n==index}" v-on:click="select(index)">{{list}}</button>
+	<ul v-for="(list, index) in books" v-show="index==n" class="books-content">
+	    <li v-for="(item, index) in list">
+	      <a href="#">
+	      <img :src="item.img" width="200" height="150">
+	      <p class="book-name">{{item.name}}</p>
+	      <p class="book-price">${{item.price}}</p>
+	      </a>
+	    </li>
+  	</ul>
+	<hr>
+	<h2>选项卡组件</h2>
+ 	<hr>
+	<button v-for="(list, index) in tabs" @click="collect(index)" v-bind:class="{active: m==index}">{{list}}</button>
+	<component :is='contents[m]'></component>
 </div>
 <script  type="text/javascript">
 	 var vm=new Vue({
@@ -55,6 +108,7 @@ button.active{
 	 	data:{
 	 		width:'700px',
 	 		height:'400px',
+	 		//demo1
 	 		btns:[
 		 		{text:"图片1",active:true},
 		 		{text:"图片2",active:false},
@@ -62,11 +116,42 @@ button.active{
 		 		{text:"图片4",active:false}
 		 	],
 	 		imgsrc:'img/1-1.png',
+	 		//demo2
 	 		lists:["图片1","图片2","图片3","图片4"],
-		 	i: '',
-		 	imagesrc:'img/1-1.png'
+		 	i:0,
+		 	imagesrc:'img/1-1.png',
+		 	//demo3
+		 	n:0,
+		 	tablists:["tab1","tab2","tab3","tab4"],
+		 	books: [
+		      [
+		      {img:"http://img3x3.ddimg.cn/49/18/21005473-1_l.jpg",name:"宝宝生病不用慌",price:"11"},
+		      {img:"http://img3x4.ddimg.cn/16/31/25063054-1_l_3.jpg",name:"认真地年轻，优雅地老去",price:"23"},
+		      {img:"http://img3x3.ddimg.cn/49/18/21005473-1_l.jpg",name:"六一礼品季童书1.9-4.9折封",price:"45"}
+		      ],
+		       [
+		      {img:"http://img3x8.ddimg.cn/48/4/25063878-1_l_3.jpg",name:"你自以为的极限，只是别人的起",price:"66"},
+		      {img:"http://img3x5.ddimg.cn/56/4/23761145-1_l.jpg",name:"聪明的孩子是如何学习的（附赠《学习风格对照表》",price:"77"},
+		      {img:"http://img3x8.ddimg.cn/48/4/25063878-1_l_3.jpg",name:"公园东门马戏团（当当独家亲笔签名）",price:"88"}
+		      ],
+		       [
+		      {img:"http://img3x9.ddimg.cn/96/11/24245889-1_l_3.jpg",name:"我更喜欢努力的自己",price:"11"},
+		      {img:"http://img3x5.ddimg.cn/19/16/24244525-1_l_6.jpg",name:"马云：未来已来",price:"22"},
+		      {img:"http://img3x9.ddimg.cn/96/11/24245889-1_l_3.jpg",name:"提问的力量：风靡美国政界与商界的11种提问模型",price:"33"}
+		      ],
+		       [
+		      {img:"http://img3x4.ddimg.cn/16/31/25063054-1_l_3.jpg",name:"华为人力资源管理",price:"55"},
+		      {img:"http://img3x8.ddimg.cn/61/17/23521768-1_l.jpg",name:"微商高手运营实战",price:"66"},
+		      {img:"http://img3x4.ddimg.cn/16/31/25063054-1_l_3.jpg",name:"创意文案与营销策划撰写技巧及实例全",price:"66"}
+		      ]
+		    ],
+		    //demo4
+		    tabs:["tab1","tab2","tab3","tab4"],
+		 	m: 0,
+		 	contents:["aaa","bbb","ccc","ddd"]
 	 	},
 	 	methods:{
+	 		//demo1
 			onclick:function(index){
 			    for (var m = this.btns.length - 1; m >= 0; m--) {
 			    	this.btns[m].active=false;
@@ -74,11 +159,36 @@ button.active{
 			    this.btns[index].active=true;
 			    this.imgsrc='img/1-'+(index+1)+'.png'
 			},
+			//demo2
 			show (index) {
 		      this.i = index,
 		      this.imagesrc='img/1-'+(index+1)+'.png'
-		    }
-	 	}	 	
+		    },
+		    //demo3
+		    select(index){
+		    	this.n = index;
+		    },
+		    //demo4
+		    collect (index) {
+				this.m = index
+			}
+	 	},
+	 	//demo4
+	 	components:{
+			"aaa":{
+				template:'<p>我是aaa组件</p>'
+			},
+			"bbb":{
+				template:'<p>我是bbb组件</p>'
+			},
+			"ccc":{
+				template:'<p>我是ccc组件</p>'
+			},
+			"ddd":{
+				template:'<p>我是ddd组件</p>'
+			}
+		}	
+			
 	 })
 </script>
 

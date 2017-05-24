@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="js/vue.js"></script>
+	<style>
+		a{
+	text-decoration: none;
+	color:#333;
+	}
+	ul{
+		list-style: none
+	}
+	h1{text-align: center;}
+	.demo{
+		width:700px;
+		margin: 50px auto;
+	}
+	.reverse{
+		cursor: pointer;
+	}
+	button.active{
+		background: #ff2972;
+		color: #fff;
+	}
+	</style>
+</head>
+<body>
+	<div class="demo">
+		<h1>自定义组件</h1>
+		<h2>一.自定义组件-全局组件</h2>
+		<h3>1.基本用法</h3>
+		<!--基本用法:var Aaa=Vue.extend({});Vue.component('',Aaa);!-->
+		<aaa></aaa>
+		<hr>
+		<h3>组件里放置数据：data必须是函数的形式，函数必须返回一个对象（json）</h2>
+		<bbb></bbb>
+		<hr>
+		<h3>组件里放置事件：点击反转数据</h2>
+		<ccc></ccc>
+		<hr>
+		<h3>2.另一种用法</h3>
+		<ddd></ddd>
+		<hr>
+		<hr>
+		<h2>二.自定义组件-局部组件</h2>
+		<h3>1.基本用法</h3>
+		<eee></eee>
+		<hr>
+		<h3>组件里放置数据事件：点击反转数据</h3>
+		<fff></fff>
+		<hr>
+		<h3>2.另一种写法</h3>
+		<ggg></ggg>
+		<hr><hr>
+		<h2>三.配合模版使用</h2>
+		<h3>1.常用的技巧是用 script 标签包含模板</h3>
+		<hhh></hhh>
+		<hr>
+		<h3>2.用 template 标签包含模板</h3>
+		<iii></iii>	
+		<h2>四.动态组件</h2>
+		<h3>component标签包含模板</h3>
+		<button v-for="(list, index) in tabs" @click="collect(index)" v-bind:class="{active: m==index}">{{list}}</button>
+		<component :is='contents[m]'></component>
+		
+	</div>
+	<template id="iii">
+		<ul>
+			<li v-for="(item,index) in items">{{index}}-{{item}}</li>
+		</ul>
+	</template>
+	<script type="x-template" id="template">
+		<p class="reverse" @click="change">{{message}}</p>
+	</script>
+	
+	<script>
+		/*全局组件*/
+		var Aaa=Vue.extend({
+			template:'<p>我是标题3</p>'
+		});
+		Vue.component('aaa',Aaa);
+		var Bbb=Vue.extend({
+			template:'<p>{{message}}</p>',
+			data(){
+				return{
+					message:'数据'
+				}
+			}
+		});
+		Vue.component('bbb',Bbb);
+		var Ccc=Vue.extend({
+			template:'<p v-on:click="change()" class="reverse">{{message}}</p>',
+			data(){
+				return{
+					message:'hello world'
+				}
+			},
+			methods:{
+				change(){
+					this.message =this.message.split('').reverse().join('');
+				}
+			}
+		});
+		Vue.component('ccc',Ccc);
+		Vue.component("ddd",{
+			template:'<p v-on:click="change()" class="reverse">{{message}}</p>',
+			data(){
+				return{
+					message:"你好"
+				}
+			},
+			methods:{
+				change(){
+					this.message =this.message.split('').reverse().join('');
+				}
+			}
+		})
+		/*局部组件*/
+		var Eee=Vue.extend({
+			template:'<p>hello</p>'
+		});
+		var Fff=Vue.extend({
+			template:'<p  class="reverse" @click="change()">{{message}}</p>',
+			data(){
+				return{
+					message:'today'
+				}
+			},
+			methods:{
+				change(){
+					this.message=this.message.split('').reverse().join('')
+				}
+			}
+		});
+		var vm=new Vue({
+			el:'.demo',
+			data:{
+			 	tabs:["tab1","tab2","tab3","tab4"],
+			 	m: 0,
+			 	contents:["tab1","tab2","tab3","tab4"]
+			},
+			methods:{
+				collect (index) {
+					this.m = index
+				}
+		 	},	
+			components:{
+				"eee":Eee,
+				"fff":Fff,
+				"ggg":{
+					template:'<p class="reverse" @click="change()">{{message}}</p>',
+					data(){
+						return{
+							message:'hello hello'
+						}
+					},
+					methods:{
+						change(){
+							this.message=this.message.split('').reverse().join('')
+						}
+					}
+				},
+				"hhh":{
+					template:'#template',
+					data(){
+						return{
+							message:'hello ok',
+						}
+					},
+					methods:{
+						change(){
+							this.message=this.message.split('').reverse().join('')
+						}
+					}
+				},
+				"iii":{
+					template:'#iii',
+					data(){
+						return{
+							items:["11","22","333"]
+						}
+					}
+				},
+				"tab1":{
+					template:'<p>我是aaa组件</p>'
+				},
+				"tab2":{
+					template:'<p>我是bbb组件</p>'
+				},
+				"tab3":{
+					template:'<p>我是ccc组件</p>'
+				},
+				"tab4":{
+					template:'<p>我是ddd组件</p>'
+				}
+
+			}
+		});
+	</script>
+</body>
+</html>
