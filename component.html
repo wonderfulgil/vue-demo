@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>组件</title>
 	<script src="js/vue.js"></script>
 	<style>
 		a{
@@ -28,8 +28,8 @@
 </head>
 <body>
 	<div class="demo">
-		<h1>自定义组件</h1>
-		<h2>一.自定义组件-全局组件</h2>
+		<h1>组件</h1>
+		<h2>一.全局组件</h2>
 		<h3>1.基本用法</h3>
 		<!--基本用法:var Aaa=Vue.extend({});Vue.component('',Aaa);!-->
 		<aaa></aaa>
@@ -44,7 +44,7 @@
 		<ddd></ddd>
 		<hr>
 		<hr>
-		<h2>二.自定义组件-局部组件</h2>
+		<h2>二.局部组件</h2>
 		<h3>1.基本用法</h3>
 		<eee></eee>
 		<hr>
@@ -60,12 +60,37 @@
 		<hr>
 		<h3>2.用 template 标签包含模板</h3>
 		<iii></iii>	
+		<hr><hr>
 		<h2>四.动态组件</h2>
 		<h3>component标签包含模板</h3>
 		<button v-for="(list, index) in tabs" @click="collect(index)" v-bind:class="{active: m==index}">{{list}}</button>
 		<component :is='contents[m]'></component>
-		
+		<hr><hr>
+		<h2>五.父子组件</h2>
+		<h3>基本用法</h3>
+		<jjj></jjj>
+		<hr>
+		<h3>子组件不能直接获取父组件的数据,需要使用props传递</h3>
+		<lll></lll>
+		<hr>
+		<h3>子组件获取父组件的多个数据</h3>
+		<ooo></ooo>
+		<hr>
+		<h3>父组件获取子组件的数据</h3>
+		<qqq></qqq>
 	</div>
+	<template id="qqq">
+		<h2>我是qqq组件--{{msg}}<rrr @child-msg="get"></rrr></h2>
+	</template>
+	<template id="rrr">
+		<h2>我是rrr组件-<input type="button" value="send" @click="send"></h2>
+	</template>
+	<template id="ooo">
+		<h2>我是ooo组件<ppp v-bind:ooo="msg" v-bind:my-Data="msg2"></ppp></h2>
+	</template>
+	<template id="lll">
+		<h2>我是lll组件<mmm v-bind:nnn="msg"></mmm></h2>
+	</template>
 	<template id="iii">
 		<ul>
 			<li v-for="(item,index) in items">{{index}}-{{item}}</li>
@@ -194,8 +219,75 @@
 				},
 				"tab4":{
 					template:'<p>我是ddd组件</p>'
-				}
+				},
+				"jjj":{
+					template:'<h2>我是jjj组件<kkk></kkk></h2>',
+					components:{
+						"kkk":{
+							template:"<h3>我是kkk组件</h3>"
+						}
+					}
 
+				},
+				"lll":{
+					data(){
+						return{
+							msg:'我是父组件的数据'
+						}
+					},
+					template:"#lll",
+					components:{
+						"mmm":{
+							props:['nnn'],
+							template:'<h3>我是mmm组件--{{nnn}}</h3>'
+						}
+					}
+				},
+				"ooo":{
+					data(){
+						return{
+							msg:'我是父组件的数据',
+							msg2:'我是父组件的第二个数据数据2'
+						}
+					},
+					template:"#ooo",
+					components:{
+						"ppp":{
+							props:['ooo','myData'],
+							template:'<h3>我是mmm组件--{{ooo}}---{{myData}}</h3>'
+						}
+					}
+				},
+				"qqq":{
+					data(){
+						return{
+							msg:'父组件数据',
+						}
+					},
+					methods:{
+						get(msg){
+							// alert(msg);
+							this.msg=msg;
+						}
+					},
+					template:"#qqq",
+					components:{
+						"rrr":{
+							template:'#rrr',
+							data(){
+								return{
+									msg2:'我是子组件的数据',
+								}
+							},
+							methods:{
+								send(){
+									this.$emit('child-msg',this.msg2)
+								}
+							}
+
+						}
+					}
+				}
 			}
 		});
 	</script>
